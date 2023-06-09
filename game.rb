@@ -1,5 +1,15 @@
 # frozen_string_literal: true
 
+module GameHelper # :nodoc:
+  def check_three_equal(set, marks)
+    if set.all?(marks[0]) || set.all?(marks[1])
+      true
+    else
+      false
+    end
+  end
+end
+
 class Game # :nodoc:
   attr_reader :player1, :player2, :current_player, :squares
 
