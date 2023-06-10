@@ -1,5 +1,15 @@
 # frozen_string_literal: true
 
+# class Board # :nodoc:
+#   attr_reader :squares, :lines
+
+#   def initialize
+#     @squares = Array.new(3) { Array.new(3) }
+#     @lines = [squares[0], squares[1], squares[2]]
+#     @columns = lines.transpose
+#   end
+# end
+
 class Game # :nodoc:
   attr_reader :player1, :player2, :current_player, :squares
 
@@ -32,9 +42,7 @@ class Game # :nodoc:
   end
 
   def check_column_complete
-    columns = [0, 1, 2].map do |column_index|
-      [squares[0][column_index], squares[1][column_index], squares[2][column_index]]
-    end
+    columns = squares.transpose
     columns.any? { |column| column.all?(player1) || column.all?(player2) }
   end
 
@@ -48,9 +56,9 @@ end
 game = Game.new
 game.pick_square(0, 0)
 game.pick_square(0, 1)
-game.pick_square(1, 1)
+game.pick_square(1, 0)
 game.pick_square(0, 2)
-game.pick_square(2, 2)
+game.pick_square(2, 0)
 p game.squares
 p game.check_line_complete
 p game.check_column_complete
