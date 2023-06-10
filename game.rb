@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
 module GameHelper # :nodoc:
-  def check_three_equal(set, marks)
-    if set.all?(marks[0]) || set.all?(marks[1])
+  def check_three_equal(set, mark1, mark2)
+    if set.all?(mark1) || set.all?(mark2)
       true
     else
       false
@@ -13,15 +13,13 @@ end
 class Game # :nodoc:
   attr_reader :player1, :player2, :current_player, :squares
 
+  include GameHelper
+
   def initialize(player1 = 'X', player2 = 'O')
     @current_player = player1
     @player1 = player1
     @player2 = player2
-    @squares = [
-      [nil, nil, nil],
-      [nil, nil, nil],
-      [nil, nil, nil]
-    ]
+    @squares = Array.new(3) { Array.new(3) }
   end
 
   def rotate_player
@@ -41,11 +39,13 @@ class Game # :nodoc:
   end
 
   def check_line_complete
-    complete = false
-    [0, 1, 2].each do |line|
-      complete = true if squares[line].all?(player1) || squares[line].all?(player2)
-    end
-    complete
+    lines = [squares[0], squares[1], squares[2]]
+    lines.any? { |line| line.all?(player1) || line.all?(player2) }
+    # complete = false
+    # lines.each do |line|
+    #   complete = true if line.all?(player1) || line.all?(player2)
+    # end
+    # complete
   end
 
   def check_column_complete
@@ -59,12 +59,12 @@ class Game # :nodoc:
 end
 
 # Tests
-# game = Game.new
-# game.pick_square(0, 0)
-# game.pick_square(0, 1)
-# game.pick_square(1, 0)
-# game.pick_square(0, 2)
-# game.pick_square(2, 0)
-# p game.squares
-# p game.check_line_complete
-# p game.check_column_complete
+game = Game.new
+game.pick_square(0, 0)
+game.pick_square(1, 0)
+game.pick_square(0, 1)
+game.pick_square(1, 1)
+game.pick_square(0, 2)
+p game.squares
+p game.check_line_complete
+p game.check_column_complete
