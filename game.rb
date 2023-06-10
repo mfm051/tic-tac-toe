@@ -41,30 +41,29 @@ class Game # :nodoc:
   def check_line_complete
     lines = [squares[0], squares[1], squares[2]]
     lines.any? { |line| line.all?(player1) || line.all?(player2) }
-    # complete = false
-    # lines.each do |line|
-    #   complete = true if line.all?(player1) || line.all?(player2)
-    # end
-    # complete
   end
 
   def check_column_complete
-    complete = false
-    [0, 1, 2].each do |column_index|
-      column = [squares[0][column_index], squares[1][column_index], squares[2][column_index]]
-      complete = true if column.all?(player1) || column.all?(player2)
+    columns = [0, 1, 2].map do |column_index|
+      [squares[0][column_index], squares[1][column_index], squares[2][column_index]]
     end
-    complete
+    columns.any? { |column| column.all?(player1) || column.all?(player2) }
+    # complete = false
+    # [0, 1, 2].each do |column_index|
+    #   column = [squares[0][column_index], squares[1][column_index], squares[2][column_index]]
+    #   complete = true if column.all?(player1) || column.all?(player2)
+    # end
+    # complete
   end
 end
 
 # Tests
 game = Game.new
 game.pick_square(0, 0)
-game.pick_square(1, 0)
 game.pick_square(0, 1)
+game.pick_square(1, 0)
 game.pick_square(1, 1)
-game.pick_square(0, 2)
+game.pick_square(2, 0)
 p game.squares
 p game.check_line_complete
 p game.check_column_complete
