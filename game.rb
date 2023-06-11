@@ -54,13 +54,8 @@ class Game # :nodoc:
 
     board.pick(line, column, current_player)
     board.show
-    if winner?
-      puts "#{current_player} wins!"
-    elsif board.complete?
-      puts "It's a draw!"
-    else
-      rotate_player
-    end
+    rotate_player
+    end_game if winner? || board.complete?
   end
 
   private
@@ -71,6 +66,11 @@ class Game # :nodoc:
 
   def winner?
     board.column_equal?(player1, player2) || board.line_equal?(player1, player2) || board.cross_equal?(player1, player2)
+  end
+
+  def end_game
+    puts 'Game complete'
+    initialize
   end
 end
 
