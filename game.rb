@@ -7,9 +7,11 @@ class Board # :nodoc:
     @squares = Array.new(3) { Array.new(3) }
   end
 
-  def pick(line, column, mark)
-    return false if squares[line][column].nil? == false
+  def square_available?(line, column)
+    squares[line][column].nil?
+  end
 
+  def pick(line, column, mark)
     squares[line][column] = mark
   end
 
@@ -28,13 +30,16 @@ class Board # :nodoc:
     crosses.any? { |cross| cross.all?(option1) || cross.all?(option2) }
   end
 
+  def complete?
+    squares.flatten.all?
+  end
+
   def show
-    "    A    B    C  \n1 #{squares[0]}\n2 #{squares[1]}\n3 #{squares[2]}\n\n"
+    puts "    A    B    C  \n1 #{squares[0]}\n2 #{squares[1]}\n3 #{squares[2]}\n\n"
   end
 end
 
 class Game # :nodoc:
-  # attr_reader :player1, :player2, :current_player, :squares
   attr_reader :player1, :player2, :current_player, :board
 
   def initialize(player1 = 'X', player2 = 'O')
@@ -42,54 +47,41 @@ class Game # :nodoc:
     @player1 = player1
     @player2 = player2
     @board = Board.new
-    # @squares = Array.new(3) { Array.new(3) }
   end
 
   def round(line, column)
+    return puts 'Not available!' if board.square_available?(line, column) == false
+
     board.pick(line, column, current_player)
     board.show
-    if complete?
+    if winner?
       puts "#{current_player} wins!"
+    elsif board.complete?
+      puts "It's a draw!"
     else
       rotate_player
     end
   end
 
+  private
+
   def rotate_player
     @current_player = current_player == player1 ? player2 : player1
   end
 
-  # def pick_square(line, column)
-  #   return if squares[line][column].nil? == false
-
-  #   squares[line][column] = current_player
-  # end
-
-  # def check_line_complete
-  #   lines = [squares[0], squares[1], squares[2]]
-  #   lines.any? { |line| line.all?(player1) || line.all?(player2) }
-  # end
-
-  # def check_column_complete
-  #   columns = squares.transpose
-  #   columns.any? { |column| column.all?(player1) || column.all?(player2) }
-  # end
-
-  # def check_cross_complete
-  #   crosses = [(0..2).map { |i| squares[i][i] }, (0..2).map { |i| squares[i][2 - i] }]
-  #   crosses.any? { |cross| cross.all?(player1) || cross.all?(player2) }
-  # end
-
-  def complete?
+  def winner?
     board.column_equal?(player1, player2) || board.line_equal?(player1, player2) || board.cross_equal?(player1, player2)
   end
-
-  # def board
-  #   "    A    B    C  \n1 #{squares[0]}\n2 #{squares[1]}\n3 #{squares[2]}\n\n"
-  # end
 end
 
 # Tests
 game = Game.new
-game.round(1, 1)
 game.round(0, 0)
+game.round(0, 1)
+game.round(0, 2)
+game.round(1, 0)
+game.round(1, 1)
+game.round(1, 2)
+game.round(2, 0)
+game.round(2, 1)
+game.round(2, 2)
