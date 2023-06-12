@@ -49,8 +49,10 @@ class Game # :nodoc:
     @board = Board.new
   end
 
-  def round(line, column)
-    return puts 'Not available!' if board.square_available?(line, column) == false
+  def round(square)
+    line = line(square)
+    column = column(square)
+    return puts "Square not available!\n\n" if board.square_available?(line, column) == false
 
     board.pick(line, column, current_player)
     board.show
@@ -58,7 +60,26 @@ class Game # :nodoc:
     end_game if winner? || board.complete?
   end
 
+  def end_game
+    puts "Game complete! Starting another round..\n\n"
+    initialize
+  end
+
   private
+
+  def line(square_code)
+    line_num = square_code.downcase.split('')[1].to_i - 1
+    [0, 1, 2].any?(line_num) ? line_num : [0, 1, 2].sample
+  end
+
+  def column(square_code)
+    case square_code.downcase.split('')[0]
+    when 'a' then 0
+    when 'b' then 1
+    when 'c' then 2
+    else [0, 1, 2].sample
+    end
+  end
 
   def rotate_player
     @current_player = current_player == player1 ? player2 : player1
@@ -67,21 +88,22 @@ class Game # :nodoc:
   def winner?
     board.column_equal?(player1, player2) || board.line_equal?(player1, player2) || board.cross_equal?(player1, player2)
   end
-
-  def end_game
-    puts 'Game complete'
-    initialize
-  end
 end
 
-# Tests
+# Game interface
 game = Game.new
-game.round(0, 0)
-game.round(0, 1)
-game.round(0, 2)
-game.round(1, 0)
-game.round(1, 1)
-game.round(1, 2)
-game.round(2, 0)
-game.round(2, 1)
-game.round(2, 2)
+
+puts "  --TIC-TAC-TOE!--\n\n"
+game.board.show
+
+puts "Enter 'end' any time to stop game\n\n"
+continue_game = true
+
+while continue_game
+  puts "Current player: #{game.current_player}.\nPick a square (e.g.: 'A1')\nif out of range I'll choose RANDOMLY"
+  user_choice = gets.chomp
+  break if user_choice == 'end'
+
+  puts "#{game.current_player} chooses #{user_choice}\n\n---------"
+  game.round(user_choice)
+end
