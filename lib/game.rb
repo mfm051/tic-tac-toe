@@ -17,7 +17,11 @@ class Game
     board.pick(square, current_player)
     board.show
     rotate_player
-    end_game if winner? || board.complete?
+    end_game if game_over?
+  end
+
+  def game_over?
+    winner? || board.full?
   end
 
   def end_game
@@ -25,13 +29,13 @@ class Game
     initialize
   end
 
+  private
+
   def winner?
     [@player1, @player2].any? do |player_mark|
-      board.full_line?(player_mark) || board.full_column?(player_mark) || board.full_cross?(player_mark)
+      board.line_full?(player_mark) || board.column_full?(player_mark) || board.cross_full?(player_mark)
     end
   end
-
-  private
 
   def rotate_player
     @current_player = current_player == player1 ? player2 : player1

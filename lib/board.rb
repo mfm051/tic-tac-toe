@@ -19,22 +19,22 @@ class Board # :nodoc:
     squares[line][column] = mark
   end
 
-  def full_line?(mark)
+  def line_full?(mark)
     lines = [squares[0], squares[1], squares[2]]
     lines.any? { |line| line.all?(mark) }
   end
 
-  def full_column?(mark)
+  def column_full?(mark)
     columns = squares.transpose
     columns.any? { |column| column.all?(mark) }
   end
 
-  def full_cross?(mark)
+  def cross_full?(mark)
     crosses = [(0..2).map { |i| squares[i][i] }, (0..2).map { |i| squares[i][2 - i] }]
     crosses.any? { |cross| cross.all?(mark) }
   end
 
-  def complete?
+  def full?
     squares.flatten.all?
   end
 

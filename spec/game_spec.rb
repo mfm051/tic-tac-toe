@@ -52,4 +52,61 @@ describe Game do
       expect(game.instance_variable_get(:@current_player)).to eq(player1)
     end
   end
+
+  describe '#game_over?' do
+    let(:board) { game.instance_variable_get(:@board) }
+
+    context 'when board is full (draw)' do
+      before do
+        allow(board).to receive(:full?).and_return(true)
+      end
+
+      it 'returns true' do
+        expect(game.game_over?).to eq(true)
+      end
+    end
+
+    context 'when a line is full' do
+      before do
+        allow(board).to receive(:line_full?).and_return(true)
+      end
+
+      it 'returns true' do
+        expect(game.game_over?).to eq(true)
+      end
+    end
+
+    context 'when a column is full' do
+      before do
+        allow(board).to receive(:column_full?).and_return(true)
+      end
+
+      it 'returns true' do
+        expect(game.game_over?).to eq(true)
+      end
+    end
+
+    context 'when a cross is full' do
+      before do
+        allow(board).to receive(:cross_full?).and_return(true)
+      end
+
+      it 'returns true' do
+        expect(game.game_over?).to eq(true)
+      end
+    end
+
+    context 'when there is neither a draw nor any trio' do
+      before do
+        allow(board).to receive(:full?).and_return(false)
+        allow(board).to receive(:line_full?).and_return(false)
+        allow(board).to receive(:column_full?).and_return(false)
+        allow(board).to receive(:cross_full?).and_return(false)
+      end
+
+      it 'returns false' do
+        expect(game.game_over?).to eq(false)
+      end
+    end
+  end
 end
