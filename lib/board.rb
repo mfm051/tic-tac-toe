@@ -19,19 +19,19 @@ class Board # :nodoc:
     squares[line][column] = mark
   end
 
-  def line_equal?(option1, option2)
+  def full_line?(mark)
     lines = [squares[0], squares[1], squares[2]]
-    lines.any? { |line| line.all?(option1) || line.all?(option2) }
+    lines.any? { |line| line.all?(mark) }
   end
 
-  def column_equal?(option1, option2)
+  def full_column?(mark)
     columns = squares.transpose
-    columns.any? { |column| column.all?(option1) || column.all?(option2) }
+    columns.any? { |column| column.all?(mark) }
   end
 
-  def cross_equal?(option1, option2)
+  def full_cross?(mark)
     crosses = [(0..2).map { |i| squares[i][i] }, (0..2).map { |i| squares[i][2 - i] }]
-    crosses.any? { |cross| cross.all?(option1) || cross.all?(option2) }
+    crosses.any? { |cross| cross.all?(mark) }
   end
 
   def complete?

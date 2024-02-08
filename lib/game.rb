@@ -25,13 +25,15 @@ class Game
     initialize
   end
 
+  def winner?
+    [@player1, @player2].any? do |player_mark|
+      board.full_line?(player_mark) || board.full_column?(player_mark) || board.full_cross?(player_mark)
+    end
+  end
+
   private
 
   def rotate_player
     @current_player = current_player == player1 ? player2 : player1
-  end
-
-  def winner?
-    board.column_equal?(player1, player2) || board.line_equal?(player1, player2) || board.cross_equal?(player1, player2)
   end
 end
