@@ -1,10 +1,10 @@
 # frozen_string_literal: true
 
-require_relative './lib/game'
+require_relative './lib/tictactoe'
 require_relative './lib/board'
 
 # Game interface
-game = Game.new
+game = TicTacToe.new
 
 puts "  --TIC-TAC-TOE!--\n\n"
 game.board.show

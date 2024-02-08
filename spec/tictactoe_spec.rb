@@ -1,15 +1,15 @@
 # frozen_string_literal: true
 
-require_relative '../lib/game'
+require_relative '../lib/tictactoe'
 require_relative '../lib/board'
 
-describe Game do
+describe TicTacToe do
   subject(:game) { described_class.new }
 
   describe '::initialize' do
     it 'sends message to create a Board' do
       expect(Board).to receive(:new)
-      Game.new
+      described_class.new
     end
   end
 

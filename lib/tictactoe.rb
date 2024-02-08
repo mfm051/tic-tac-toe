@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 # :nodoc:
-class Game
+class TicTacToe
   attr_reader :player1, :player2, :current_player, :board
 
   def initialize(player1 = 'X', player2 = 'O')
