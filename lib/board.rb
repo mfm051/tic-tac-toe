@@ -7,11 +7,15 @@ class Board # :nodoc:
     @squares = Array.new(3) { Array.new(3) }
   end
 
-  def square_available?(line, column)
+  def square_available?(square)
+    line = line(square)
+    column = column(square)
     squares[line][column].nil?
   end
 
-  def pick(line, column, mark)
+  def pick(square, mark)
+    line = line(square)
+    column = column(square)
     squares[line][column] = mark
   end
 
@@ -36,5 +40,21 @@ class Board # :nodoc:
 
   def show
     puts "    A    B    C  \n1 #{squares[0]}\n2 #{squares[1]}\n3 #{squares[2]}\n\n"
+  end
+
+  private
+
+  def line(square_code)
+    line_num = square_code.downcase.split('')[1].to_i - 1
+    [0, 1, 2].any?(line_num) ? line_num : [0, 1, 2].sample
+  end
+
+  def column(square_code)
+    case square_code.downcase.split('')[0]
+    when 'a' then 0
+    when 'b' then 1
+    when 'c' then 2
+    else [0, 1, 2].sample
+    end
   end
 end
