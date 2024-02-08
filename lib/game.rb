@@ -17,16 +17,10 @@ class Game
     board.pick(square, current_player)
     board.show
     rotate_player
-    end_game if game_over?
   end
 
   def game_over?
     winner? || board.full?
-  end
-
-  def end_game
-    puts "Game complete! Starting another round..\n\n"
-    initialize
   end
 
   private

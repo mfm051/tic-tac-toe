@@ -41,18 +41,6 @@ describe Game do
     end
   end
 
-  describe '#end_game' do
-    it 'restarts board' do
-      expect { game.end_game }.to(change { game.instance_variable_get(:@board) })
-    end
-
-    it 'makes player1 the next player' do
-      player1 = game.instance_variable_get(:@player1)
-      game.end_game
-      expect(game.instance_variable_get(:@current_player)).to eq(player1)
-    end
-  end
-
   describe '#game_over?' do
     let(:board) { game.instance_variable_get(:@board) }
 
