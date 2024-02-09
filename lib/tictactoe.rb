@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
+require_relative './board'
+
 # :nodoc:
 class TicTacToe
-  attr_reader :player1, :player2, :current_player, :board
-
   def initialize(player1 = 'X', player2 = 'O')
     @current_player = player1
     @player1 = player1
@@ -11,27 +11,31 @@ class TicTacToe
     @board = Board.new
   end
 
-  def round(square)
-    return puts "Square not available!\n\n" if board.square_available?(square) == false
-
-    board.pick(square, current_player)
-    board.show
-    rotate_player
+  def play
+    until game_over?
+      @board.show
+      puts "Current player: #{@current_player}. Pick a square"
+      pick_square
+      rotate_player
+    end
   end
 
   def game_over?
-    winner? || board.full?
+    @board.three_complete?(@player1) || @board.three_complete?(@player2) || @board.full?
   end
 
   private
 
-  def winner?
-    [@player1, @player2].any? do |player_mark|
-      board.line_full?(player_mark) || board.column_full?(player_mark) || board.cross_full?(player_mark)
-    end
+  def pick_square
+    square = gets.chomp.upcase
+    @board.mark(square, @current_player)
+  rescue ArgumentError => e
+    puts e.message
+    puts 'Please choose another square'
+    retry
   end
 
   def rotate_player
-    @current_player = current_player == player1 ? player2 : player1
+    @current_player = @current_player == @player1 ? @player2 : @player1
   end
 end
