@@ -11,13 +11,16 @@ class TicTacToe
     @board = Board.new
   end
 
-  def play
-    until game_over?
-      @board.show
-      puts "Current player: #{@current_player}. Pick a square"
-      pick_square
-      rotate_player
-    end
+  def self.play
+    game = TicTacToe.new
+    game.round until game.game_over?
+  end
+
+  def round
+    @board.show
+    puts "Current player: #{@current_player}. Pick a square"
+    pick_square
+    rotate_player
   end
 
   def game_over?
