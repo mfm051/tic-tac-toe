@@ -5,6 +5,7 @@ require_relative '../lib/board'
 
 describe TicTacToe do
   subject(:game) { described_class.new }
+  let(:board) { game.instance_variable_get(:@board) }
 
   describe '::initialize' do
     it 'sends message to create a Board' do
@@ -14,36 +15,26 @@ describe TicTacToe do
   end
 
   describe '#round' do
-    let(:board) { game.instance_variable_get(:@board) }
-
-    it 'sends message to its board to check if given square is available' do
-      square = 'A1'
-      expect(board).to receive(:square_available?).with(square)
-      game.round(square)
+    before do
+      allow(game).to receive(:gets).and_return('A1')
     end
 
     it 'sends message to its board to mark square' do
-      square = 'A1'
-      mark = game.instance_variable_get(:@current_player)
-      expect(board).to receive(:pick).with(square, mark)
-      game.round(square)
+      expect(board).to receive(:mark)
+      game.round
     end
 
     it 'sends message to its board to show itself' do
-      square = 'A1'
       expect(board).to receive(:show)
-      game.round(square)
+      game.round
     end
 
     it 'changes player' do
-      square = 'A1'
-      expect { game.round(square) }.to(change { game.instance_variable_get(:@current_player) })
+      expect { game.round }.to(change { game.instance_variable_get(:@current_player) })
     end
   end
 
   describe '#game_over?' do
-    let(:board) { game.instance_variable_get(:@board) }
-
     context 'when board is full (draw)' do
       before do
         allow(board).to receive(:full?).and_return(true)
@@ -54,9 +45,9 @@ describe TicTacToe do
       end
     end
 
-    context 'when a line is full' do
+    context 'when board has line, column or cross completed' do
       before do
-        allow(board).to receive(:line_full?).and_return(true)
+        allow(board).to receive(:three_complete?).and_return(true)
       end
 
       it 'returns true' do
@@ -64,32 +55,10 @@ describe TicTacToe do
       end
     end
 
-    context 'when a column is full' do
-      before do
-        allow(board).to receive(:column_full?).and_return(true)
-      end
-
-      it 'returns true' do
-        expect(game.game_over?).to eq(true)
-      end
-    end
-
-    context 'when a cross is full' do
-      before do
-        allow(board).to receive(:cross_full?).and_return(true)
-      end
-
-      it 'returns true' do
-        expect(game.game_over?).to eq(true)
-      end
-    end
-
-    context 'when there is neither a draw nor any trio' do
+    context 'when board has neither a trio nor is full' do
       before do
         allow(board).to receive(:full?).and_return(false)
-        allow(board).to receive(:line_full?).and_return(false)
-        allow(board).to receive(:column_full?).and_return(false)
-        allow(board).to receive(:cross_full?).and_return(false)
+        allow(board).to receive(:three_complete?).and_return(false)
       end
 
       it 'returns false' do
