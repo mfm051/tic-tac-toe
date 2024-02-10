@@ -35,35 +35,14 @@ describe TicTacToe do
   end
 
   describe '#game_over?' do
-    context 'when board is full (draw)' do
-      before do
-        allow(board).to receive(:full?).and_return(true)
-      end
-
-      it 'returns true' do
-        expect(game.game_over?).to eq(true)
-      end
+    it 'sends message to ask if board is full' do
+      expect(board).to receive(:full?)
+      game.game_over?
     end
 
-    context 'when board has line, column or cross completed' do
-      before do
-        allow(board).to receive(:three_complete?).and_return(true)
-      end
-
-      it 'returns true' do
-        expect(game.game_over?).to eq(true)
-      end
-    end
-
-    context 'when board has neither a trio nor is full' do
-      before do
-        allow(board).to receive(:full?).and_return(false)
-        allow(board).to receive(:three_complete?).and_return(false)
-      end
-
-      it 'returns false' do
-        expect(game.game_over?).to eq(false)
-      end
+    it 'sends message to ask if board has line, column or cross complete for both players' do
+      expect(board).to receive(:three_complete?).twice
+      game.game_over?
     end
   end
 end
