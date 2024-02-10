@@ -4,6 +4,8 @@ require_relative './board'
 
 # :nodoc:
 class TicTacToe
+  attr_reader :board
+
   def initialize(player1 = 'X', player2 = 'O')
     @current_player = player1
     @player1 = player1
@@ -14,6 +16,7 @@ class TicTacToe
   def self.play
     game = TicTacToe.new
     game.round until game.game_over?
+    puts game.board
   end
 
   def round
