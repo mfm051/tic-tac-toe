@@ -9,11 +9,13 @@ class Board
   def square_available?(square)
     line = line(square)
     column = column(square)
+
+    return false if line.nil? || column.nil?
+
     @squares[line][column].nil?
   end
 
   def mark(square, mark)
-    raise ArgumentError, 'Out of board!' unless ('A'..'C').include?(square[0]) && ('1'..'3').include?(square[1])
     raise ArgumentError, 'Square unavailable' unless square_available?(square)
 
     line = line(square)
@@ -30,23 +32,26 @@ class Board
   end
 
   def show
-    puts "    A    B    C  \n1 #{@squares[0]}\n2 #{@squares[1]}\n3 #{@squares[2]}\n\n"
+    line1, line2, line3 = @squares.map { |line| line.map { |i| i.to_s.rjust(1) }.join(' ') }
+
+    puts <<~BOARD
+        A B C
+      1 #{line1}
+      2 #{line2}
+      3 #{line3}
+    BOARD
   end
 
   private
 
-  def line(square_code)
-    line_num = square_code.downcase.split('')[1].to_i - 1
-    [0, 1, 2].any?(line_num) ? line_num : [0, 1, 2].sample
+  def line(square)
+    line_input = square[1].to_i - 1
+    (0..2).include?(line_input) ? line_input : nil
   end
 
-  def column(square_code)
-    case square_code.downcase.split('')[0]
-    when 'a' then 0
-    when 'b' then 1
-    when 'c' then 2
-    else [0, 1, 2].sample
-    end
+  def column(square)
+    column_indexes = { 'A' => 0, 'B' => 1, 'C' => 2 }
+    column_indexes[square[0].upcase]
   end
 
   def line_full?(mark)
