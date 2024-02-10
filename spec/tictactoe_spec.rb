@@ -25,7 +25,7 @@ describe TicTacToe do
     end
 
     it 'sends message to its board to show itself' do
-      expect(board).to receive(:show)
+      expect(board).to receive(:to_s)
       game.round
     end
 

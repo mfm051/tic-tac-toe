@@ -31,10 +31,10 @@ class Board
     @squares.flatten.all?
   end
 
-  def show
+  def to_s
     line1, line2, line3 = @squares.map { |line| line.map { |i| i.to_s.rjust(1) }.join(' ') }
 
-    puts <<~BOARD
+    <<~BOARD
         A B C
       1 #{line1}
       2 #{line2}

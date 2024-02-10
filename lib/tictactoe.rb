@@ -17,7 +17,7 @@ class TicTacToe
   end
 
   def round
-    @board.show
+    puts @board
     puts "Current player: #{@current_player}. Pick a square"
     pick_square
     rotate_player
